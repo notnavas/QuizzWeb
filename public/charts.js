@@ -29,7 +29,7 @@ $(function () {
 
   });
   var porcentajeAceptado = (ejAceptados + contAceptados) / (contribuciones.contrEjercicios.length + contribuciones.contrContenidos.length) * 100;
-  $('#porcentajeContrAceptadosChart').text("El " + porcentajeAceptado + "%" + " de tus contribuciones han sido aceptadas");
+  $('#porcentajeContrAceptadosChart').text("El " + porcentajeAceptado.toFixed(2) + "%" + " de tus contribuciones han sido aceptadas");
 
   //estadisticas
   var estadisticas = JSON.parse($('#estadisticasHidden').text());

@@ -43,7 +43,7 @@ $(function () {
 
  statChartsPrf();
 
-  $('#porcentajeContrAceptadosChartPrf').text("El " + porcentajeAceptado + "%" + " de las contribuciones del alumno han sido aceptadas");
+  $('#porcentajeContrAceptadosChartPrf').text("El " + porcentajeAceptado.toFixed(2) + "%" + " de las contribuciones del alumno han sido aceptadas");
 
 
   $('a[data-toggle="tab"][href="#aportacionesStudPrf"]').on('shown.bs.tab', function (e) {

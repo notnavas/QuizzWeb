@@ -191,31 +191,50 @@ $(document).ready(function () {
 		$("#numEjsContent").empty();
 		$("#numEjsAniadir1").empty();
 
-		var content = JSON.parse($(this).val());
-		var HTMLpintaEjs = '<h3 class = "success">' + content.numEjercicios + '</h3>';
-
-
-		var HTMLnumEjsAniadirOpt = "";
-		if (Number(content.numEjercicios) >= 5) {
-			for (var i = 5; i <= Number(content.numEjercicios); i++) {
-				HTMLnumEjsAniadirOpt = HTMLnumEjsAniadirOpt + "<option>" + i + "</option>";
-			}
-		} else {
-			//no 
-			HTMLnumEjsAniadirOpt = "<option disabled >No hay suficientes ejercicios</option>";
-		}
-
-
-		var HTMLnumEjsAniadir = '                                              <div class="form-group">  ' +
+		if ($(this).val() == "error"){
+		
+			var HTMLnumEjsAniadirOpt = "<option disabled >No hay suficientes ejercicios</option>";
+			var HTMLpintaEjs = '<h3 class = "success">' + "Elija un contenido valido" + '</h3>';
+			var HTMLnumEjsAniadir = '                                              <div class="form-group">  ' +
 			'                                                   <label for="numEjercicios">Cantidad de ejercicios a añadir (entre 5 y 10)</label>  ' +
 			'                                                     <select class="form-control" id="numEjercicios" name="numEjercicios" required = "true">  ' +
 			HTMLnumEjsAniadirOpt +
 			'                                                     </select>  ' +
 			'                                                </div>  ';
 
-		$("#numEjsContent").append(HTMLpintaEjs);
-		$("#numEjsAniadir1").append(HTMLnumEjsAniadir);
 
+			$("#numEjsContent").append(HTMLpintaEjs);
+			$("#numEjsAniadir1").append(HTMLnumEjsAniadir);
+			
+		}else{
+			
+			var content = JSON.parse($(this).val());
+			var HTMLpintaEjs = '<h3 class = "success">' + content.numEjercicios + '</h3>';
+	
+	
+			var HTMLnumEjsAniadirOpt = "";
+			if (Number(content.numEjercicios) >= 5) {
+				for (var i = 5; i <= Number(content.numEjercicios); i++) {
+					HTMLnumEjsAniadirOpt = HTMLnumEjsAniadirOpt + "<option>" + i + "</option>";
+				}
+			} else {
+				//no 
+				HTMLnumEjsAniadirOpt = "<option disabled >No hay suficientes ejercicios</option>";
+			}
+	
+	
+			var HTMLnumEjsAniadir = '                                              <div class="form-group">  ' +
+				'                                                   <label for="numEjercicios">Cantidad de ejercicios a añadir (entre 5 y 10)</label>  ' +
+				'                                                     <select class="form-control" id="numEjercicios" name="numEjercicios" required = "true">  ' +
+				HTMLnumEjsAniadirOpt +
+				'                                                     </select>  ' +
+				'                                                </div>  ';
+	
+			$("#numEjsContent").append(HTMLpintaEjs);
+			$("#numEjsAniadir1").append(HTMLnumEjsAniadir);
+	
+		}
+		
 	});
 
 
