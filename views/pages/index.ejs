@@ -1,0 +1,54 @@
+<% include ../partials/head %>
+
+	<body class="hold-transition login-page">
+		<div class="login-box">
+			<div class="login-logo">
+				<a>
+					<b>Quizz</b> Web</a>
+			</div>
+			<!-- /.login-logo -->
+			<div class="login-box-body">
+				<p class="login-box-msg">
+					<b>Inicie sesión</b>
+				</p>
+
+				<form action="/index" method="post">
+					<div class="form-group has-feedback">
+						<input class="form-control" name="mail" required="true" placeholder="Email" type="email">
+						<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+					</div>
+					<div class="form-group has-feedback">
+
+						<input class="form-control" name="password" required="true" placeholder="Password" type="password">
+						<span class="glyphicon glyphicon-lock form-control-feedback"></span>
+					</div>
+					<% if (errores !=""){%>
+						<div class="error">
+							<p>
+								<%-errores %>
+							</p>
+						</div>
+						<% }%>
+							<div class="row">
+								<!-- /.col -->
+								<div class="col-xs-4">
+									<button type="submit" class="btn btn-primary btn-block btn-flat" id="btnLogin">Entrar</button>
+								</div>
+								
+								<!-- /.col -->
+							</div>
+				</form>
+
+				<!-- /.social-auth-links -->
+
+				<a href="#">I forgot my password</a>
+				<br>
+				<a href="#" class="text-center">Register a new membership</a>
+
+			</div>
+			<!-- /.login-box-body -->
+		</div>
+		<!-- /.login-box -->
+
+	</body>
+	<% include ../partials/tail %>

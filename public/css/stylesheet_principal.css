@@ -1,0 +1,31 @@
+.error{
+    color:red;
+    font-weight: bold;
+    align-self: center;
+    
+}
+.success{
+    color:green;
+    font-weight: bold;
+   
+    
+}
+.login-box-body{ 
+    border-radius: 30px;
+    background-color: #75DCCC;
+}
+#btnLogin{
+
+    border-radius: 10px;
+    background-color: #13716B;
+}
+.chart {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    min-height: 200px;
+  }
+  .chart svg,
+  .chart canvas {
+    width: 100% !important;
+  }

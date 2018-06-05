@@ -1,0 +1,370 @@
+<% include ../partials/head %>
+
+	<body class="hold-transition skin-blue sidebar-mini">
+		<div class="wrapper">
+
+			<header class="main-header">
+				<% include ../partials/header %>
+			</header>
+
+			<aside class="main-sidebar">
+				<% include ../partials/aside %>
+			</aside>
+			<!-- =================================  CONTENT =================================================== -->
+			<div class="content-wrapper">
+				<!-- Content Header (Page header) -->
+				<section class="content-header">
+					<h1>
+						Información de clase
+					</h1>
+					<ol class="breadcrumb">
+						<li>
+							<a href="/index">
+								<i class="fa fa-dashboard"></i> Home</a>
+						</li>
+					</ol>
+				</section>
+
+				<!-- Main content -->
+				<section class="content">
+
+					<div class="row">
+						<div class="col-md-3">
+
+							<!-- Profile Image -->
+							<div class="box box-primary">
+								<div class="box-body box-profile">
+									<img class="profile-user-img img-responsive img-circle" src="img/blackboard.png" alt="User profile picture">
+
+									<h3 class="profile-username text-center">
+										<%- clase.name %>
+									</h3>
+
+									<p class="text-muted text-center">Codigo de clase:
+										<%- clase.code %>
+									</p>
+
+									<ul class="list-group list-group-unbordered">
+										<li class="list-group-item">
+											<b>Profesor:</b>
+											<a class="pull-right">
+												<%- clase.teacher_id %>
+											</a>
+										</li>
+										<li class="list-group-item">
+											<b>Curso:</b>
+											<a class="pull-right">
+												<%- clase.grade %>
+											</a>
+										</li>
+										<li class="list-group-item">
+											<b>Ejercicios resueltos:</b>
+											<a class="pull-right">
+												<%- estadisticasClase.estadisticasClaseQuestions.length %>
+											</a>
+										</li>
+										<li class="list-group-item">
+											<b>Nota media:</b>
+											<a class="pull-right" id="notaMediaPerfil"></a>
+										</li>
+										<li class="list-group-item">
+											<b>Contribuciones de alumnos:</b>
+											<a class="pull-right">
+												<%- (contribucionesClase.contrEjerciciosClase.length + contribucionesClase.contrContenidosClase.length) %>
+											</a>
+										</li>
+										<li class="list-group-item">
+											<b>Alumnos</b>
+											<a class="pull-right">
+												<%-clase.numAlumnos%>
+											</a>
+										</li>
+									</ul>
+								</div>
+								<!-- /.box-body -->
+							</div>
+							<!-- /.box -->
+
+							<!-- About Me Box -->
+							<div class="box box-primary">
+								<div class="box-header with-border">
+									<h3 class="box-title">Información</h3>
+								</div>
+								<!-- /.box-header -->
+								<div class="box-body">
+									<strong>
+										<i class="fa fa-book margin-r-5"></i> Temario/secciones</strong>
+									<br>
+									<% sections.forEach(function(valor, indice){%>
+
+										<p>
+											<span class="label label-success">
+												<%- valor.name %>
+											</span>
+										</p>
+
+
+										<%})%>
+
+								</div>
+								<!-- /.box-body -->
+							</div>
+							<!-- /.box -->
+						</div>
+						<!-- /.col -->
+						<div class="col-md-9">
+							<div class="nav-tabs-custom">
+								<ul class="nav nav-tabs">
+									<li class="active">
+										<a href="#estadisticasClase" data-toggle="tab">Estadisticas y contribuciones</a>
+									</li>
+									<li>
+										<a href="#ranking" data-toggle="tab">Ranking</a>
+									</li>
+									<li>
+										<a href="#addContent" data-toggle="tab">Añadir Contenido</a>
+									</li>
+									<li>
+										<a href="#classContent" data-toggle="tab">Contenido de la clase</a>
+									</li>
+								</ul>
+								<% 	var contributionsJSON = JSON.stringify(contribucionesClase); %>
+								<p id="contribucionesClaseHidden" hidden="true">
+									<%- contributionsJSON %>
+								</p>
+								<% 	var statsJSON = JSON.stringify(estadisticasClase); %>
+								<p id="estadisticasClaseHidden" hidden="true">
+									<%- statsJSON %>
+								</p>
+								<div class="tab-content">
+									<div class="active tab-pane" id="estadisticasClase">
+										<div class="row">
+											<div class="col-md-8">
+												<!-- Bar CHART -->
+												<div class="box box-danger">
+													<div class="box-header with-border">
+														<h3 class="box-title">Estadisticas de contenidos (nota media):</h3>
+
+														<div class="box-tools pull-right">
+															<button type="button" class="btn btn-box-tool" data-widget="collapse">
+																<i class="fa fa-minus"></i>
+															</button>
+															<button type="button" class="btn btn-box-tool" data-widget="remove">
+																<i class="fa fa-times"></i>
+															</button>
+														</div>
+													</div>
+													<div class="box-body">
+														<div class = "chart">
+															<canvas id="statBarChartClase" style="height:500px"></canvas>
+														</div>
+														<h3 id=""></h3>
+													</div>
+													<!-- /.box-body -->
+												</div>
+												<!-- /.box -->
+
+											</div>
+											<!-- /.col (LEFT) -->
+											<div class="col-md-8">
+												<!-- Bar CHART -->
+												<div class="box box-danger">
+													<div class="box-header with-border">
+														<h3 class="box-title">Contribuciones:
+															<%- (contribucionesClase.contrEjerciciosClase.length + contribucionesClase.contrContenidosClase.length) %>
+														</h3>
+
+														<div class="box-tools pull-right">
+															<button type="button" class="btn btn-box-tool" data-widget="collapse">
+																<i class="fa fa-minus"></i>
+															</button>
+															<button type="button" class="btn btn-box-tool" data-widget="remove">
+																<i class="fa fa-times"></i>
+															</button>
+														</div>
+													</div>
+													<div class="box-body">
+
+														<canvas id="contrPieChartClase" style="height:250px"></canvas>
+														<h3 id="porcentajeContrAceptadosClaseChart"></h3>
+													</div>
+													<!-- /.box-body -->
+												</div>
+												<!-- /.box -->
+
+											</div>
+											<!-- /.col (LEFT) -->
+										</div>
+										<!-- /.row -->
+
+									</div>
+									<!-- /.tab-pane -->
+									<div class="tab-pane" id="ranking">
+										Aquí irá un ranking con los alumnos con mas contribuciones/nota media (futuras versiones)
+									</div>
+									<!-- /.tab-pane -->
+
+									<div class="tab-pane" id="addContent">
+										<div class="box box-primary">
+											<div class="box-header with-border">
+												<h3 class="box-title">Añadir nueva sección/tema</h3>
+											</div>
+											<!-- /.box-header -->
+											<!-- form start -->
+											<form role="form" action="/crearSeccion" method="post">
+												<div class="box-body">
+													<div class="form-group">
+														<label for="nuevaSeccion">Nombre de sección:</label>
+														<input class="form-control" maxlength="100" required="true" name="nuevaSeccion" id="nuevaSeccion" placeholder="Introduce el nombre del nuevo tema/sección"
+														 type="text">
+														<input class="form-control" id="idClaseActual" name="idClaseActual" type="hidden" value="<%- clase.id %>">
+													</div>
+												</div>
+												<!-- /.box-body -->
+												<div class="box-footer">
+													<button type="submit" class="btn btn-primary">Aceptar</button>
+												</div>
+											</form>
+										</div>
+										<!-- /.box -->
+										<div class="box box-primary">
+											<div class="box-header with-border">
+												<h3 class="box-title">Añadir nuevo contenido/autor</h3>
+											</div>
+											<!-- /.box-header -->
+											<!-- form start -->
+											<form role="form" action="/crearContenido" method="post" enctype='multipart/form-data'>
+												<div class="box-body">
+													<div class="form-group">
+														<label for="nuevoTituloContenido">Titulo del contenido:</label>
+														<input class="form-control" maxlength="100" name="nuevoTituloContenido" required="true" id="nuevoTituloContenido" placeholder="Introduce el titulo del nuevo contenido"
+														 type="text">
+														<input class="form-control" id="idClaseActual" name="idClaseActual" type="hidden" value="<%- clase.id %>">
+													</div>
+													<div class="form-group">
+														<label>Descripción del contenido/autor</label>
+														<textarea class="form-control" required="true" maxlength="8000" name="descripcionContenido" rows="3" placeholder="Introduce la descripción ... (Max. 8000 caracteres)"></textarea>
+													</div>
+													<div class="form-group">
+														<label for="linkContenido">Link del contenido:</label>
+														<input class="form-control" maxlength="500" name="linkContenido" required="true" id="linkContenido" placeholder="Introduce el link del nuevo contenido"
+														 type="text">
+
+													</div>
+													<div class="form-group">
+														<input type="hidden" name="MAX_FILE_SIZE" value="4194304" />
+														<label for="imagenContenido">Imagen del contenido/autor</label>
+														<input id="imagenContenido" required="true" type="file" name="imagenContenido" id="upload" class="upload">
+
+														<p class="help-block">La imagen es requerida para crear el contenido.</p>
+													</div>
+													<div class="form-group">
+														<label for="seccionDelContenido">Seccion/tema de este contenido/autor</label>
+														<select class="form-control" id="seccionDelContenido" name="seccionDelContenido">
+															<% sections.forEach(function(valor, indice){%>
+																<option value="<%-valor.id%>">
+																	<%-valor.name%>
+																</option>
+																<%})%>
+														</select>
+													</div>
+
+												</div>
+												<!-- /.box-body -->
+												<div class="box-footer">
+													<button type="submit" class="btn btn-primary">Aceptar</button>
+												</div>
+											</form>
+										</div>
+										<!-- /.box -->
+
+									</div>
+									<!-- /.tab-pane -->
+									<div class="tab-pane" id="classContent">
+										<div class="table-responsive">
+											<table id="tablaContenidos" class="table table-bordered table-striped">
+												<thead>
+													<tr>
+														<th style="display:none;">id</th>
+														<th>Seccion</th>
+														<th>Contenido</th>
+														<th>Descripcion</th>
+														<!--<th>imagen</th>-->
+													</tr>
+												</thead>
+												<tbody>
+													<% section_content.forEach(function(valor, indice){%>
+														<tr role="row" class="odd">
+															<td style="display:none;">
+																<%-valor.idSection%>
+															</td>
+															<td>
+																<%- valor.nombreSeccion %>
+															</td>
+															<td>
+																<%-valor.nombreContent %>
+															</td>
+															<td>
+																<button type="button" class="btn btn-info" data-toggle="modal" data-target="#descripcionCont<%- indice %>">
+																	Descripción
+																</button>
+																<div class="modal modal-info fade" id="descripcionCont<%- indice %>" style="display: none;">
+																	<div class="modal-dialog">
+																		<div class="modal-content">
+																			<div class="modal-header">
+																				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																					<span aria-hidden="true">×</span>
+																				</button>
+																				<h4 class="modal-title">Descripción del contenido</h4>
+																			</div>
+																			<div class="modal-body">
+																				<!--  <img src="<%- valor.image %>"/> -->
+																				<p>
+																					<%- valor.description %>
+																				</p>
+																			</div>
+																			<div class="modal-footer">
+																				<button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+																			</div>
+																		</div>
+																		<!-- /.modal-content -->
+																	</div>
+																	<!-- /.modal-dialog -->
+																</div>
+
+															</td>
+															<!--<td><%-valor.image%></td>-->
+														</tr>
+														<%})%>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+								<!-- /.tab-content -->
+							</div>
+							<!-- /.nav-tabs-custom -->
+						</div>
+						<!-- /.col -->
+					</div>
+					<!-- /.row -->
+
+				</section>
+				<!-- /.content -->
+			</div>
+			<!-- /.content-wrapper -->
+			<!-- ==================================  CONTENT =================================================== -->
+			<footer class="main-footer">
+				<% include ../partials/footer %>
+			</footer>
+
+			<aside class="control-sidebar control-sidebar-dark">
+				<% include ../partials/sidebar%>
+			</aside>
+
+			<div class="control-sidebar-bg"></div>
+		</div>
+
+
+		<% include ../partials/tail %>
+		<script src="chartsClase.js"></script>

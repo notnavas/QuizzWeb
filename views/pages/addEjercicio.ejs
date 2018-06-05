@@ -1,0 +1,815 @@
+<% include ../partials/head %>
+
+  <body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+      <header class="main-header">
+        <% include ../partials/headerStudent %>
+      </header>
+
+      <aside class="main-sidebar">
+        <% include ../partials/asideStudent %>
+      </aside>
+      <!-- =================================  CONTENT =================================================== -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            Añadir Ejercicios
+            <small>Solicitar nuevos ejercicios</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li>
+              <a href="/perfil">
+                <i class="fa fa-dashboard"></i> Home</a>
+            </li>
+          </ol>
+        </section>
+        <!-- Main content -->
+        <section class="content">
+
+          <!-- Default box -->
+          <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">Ejercicios</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                  <i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+                  <i class="fa fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <!-- data table classrooms-->
+            <div class="box-body">
+              <div class="box">
+                <div class="box-header">
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+
+                        <!-- /.col -->
+                        <div class="col-md-9">
+                          <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs">
+                              <li class="active">
+                                <a href="#TF" data-toggle="tab">True or False</a>
+                              </li>
+                              <li>
+                                <a href="#FG" data-toggle="tab">Fill in the gap</a>
+                              </li>
+                              <li>
+                                <a href="#MA" data-toggle="tab">Multiple Awser</a>
+                              </li>
+                              <li>
+                                <a href="#DQ" data-toggle="tab">Direct Question</a>
+                              </li>
+                              <li>
+                                <a href="#OS" data-toggle="tab">Order Sentencies</a>
+                              </li>
+                              <li>
+                                <a href="#PW" data-toggle="tab">Pair Words</a>
+                              </li>
+                              <li>
+                                <a href="#RT" data-toggle="tab">Recognise the Text</a>
+                              </li>
+                            </ul>
+                            <div class="tab-content">
+                              <div class="active tab-pane" id="TF">
+                                <div class="box box-primary">
+                                  <div class="box-header with-border">
+                                    <h3 class="box-title">Añadir nuevo ejercicio "True or false" </h3>
+                                    <br>
+                                    <br>
+                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#descripcionTF">
+                                      Descripción
+                                    </button>
+                                    <div class="modal modal-info fade" id="descripcionTF" style="display: none;">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">×</span>
+                                            </button>
+                                            <h4 class="modal-title">Descripción del ejercicio</h4>
+                                          </div>
+                                          <div class="modal-body">
+                                            <h3> Descripcion:</h3>
+                                            <br>
+                                            <p>Este ejercicio se trata de identificar si un enuniciado es verdadero o falso.</p>
+                                            <br>
+                                            <h3> Ejemplo:</h3>
+                                            <br>
+                                            <b>Enunciado:</b>
+                                            <br> La fotosíntesis o función clorofílica es la conversión de materia inorgánica en materia
+                                            orgánica gracias a la energía que aporta la luz.
+                                            <br>
+            
+                                            <b>Respuesta correcta:</b>
+                                            <ul>
+                                              <li> Verdadero</li>
+            
+                                            </ul>
+                                            </p>
+            
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                                          </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                      </div>
+                                      <!-- /.modal-dialog -->
+                                    </div>
+                                  </div>
+                                  <!-- /.box-header -->
+                                  <!-- form start -->
+                                  <form role="form" action="/solicitudEjercicioTF" method="post">
+                                    <div class="box-body">
+                                      <div class="form-group">
+                                        <label>Enunciado:</label>
+                                        <textarea class="form-control" required="true" maxlength="1500" name="enunciadoTF" rows="3" placeholder="Introduce el enunciado del ejercicio ... (Max. 1500 caracteres)"></textarea>
+                                      </div>
+                                      <label>Comentario sobre la respuesta:</label>  
+                                                 <textarea class="form-control" required="true" maxlength="1000" name="comentarioTF" rows="2" placeholder="Introduce el comentario del ejercicio, explicando por que es o no correcta la respuesta... (Max. 1000 caracteres )"></textarea>   
+                                      <div class="form-group">
+                                        <label>Verdadero o Falso:</label>
+                                        <div class="radio">
+                                          <label>
+                                            <input name="radioTF" id="radioVerdadero" value="1" checked="true" type="radio"> El enunciado es Verdadero.
+                                          </label>
+                                        </div>
+                                        <div class="radio">
+                                          <label>
+                                            <input name="radioTF" id="radioFalso" value="0" type="radio"> El enunciado es Falso.
+                                          </label>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="contenidoDelEjercicioTF">Contenido/autor de este ejercicio</label>
+                                        <select class="form-control" id="contenidoDelEjercicioTF" name="contenidoDelEjercicioTF">
+                                          <% contents.forEach(function(valor, indice){%>
+                                            <option value="<%-valor.id%>">
+                                              <%-valor.name%>
+                                            </option>
+                                            <%})%>
+                                        </select>
+                                      </div>
+            
+                                    </div>
+                                    <!-- /.box-body -->
+                                    <div class="box-footer">
+                                      <button type="submit" class="btn btn-primary">Aceptar</button>
+                                    </div>
+                                  </form>
+                                </div>
+                                <!-- /.box -->
+                              </div>
+                              <!-- /.tab-pane -->
+                              <div class="tab-pane" id="FG">
+                                <div class="box box-primary">
+                                  <div class="box-header with-border">
+                                    <h3 class="box-title">Añadir nuevo ejercicio "Fill in the gap" </h3>
+                                    <br>
+                                    <br>
+                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#descripcionFG">
+                                      Descripción
+                                    </button>
+                                    <div class="modal modal-info fade" id="descripcionFG" style="display: none;">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">×</span>
+                                            </button>
+                                            <h4 class="modal-title">Descripción del ejercicio</h4>
+                                          </div>
+                                          <div class="modal-body">
+                                            <h3> Descripcion:</h3>
+                                            <br>
+                                            <p>Este ejercicio se trata de rellenar un enunciado con una serie de palabras, en el enunciado
+                                              vendrán los huecos en los que el usuario introducirá las palabras en el orden adecuado.</p>
+                                            <br>
+                                            <h3> Ejemplo:</h3>
+                                            <br>
+                                            <b>Enunciado:</b>
+                                            <br> In Hills like White Elephants we can see the influence of (1)_______ poets, because of the
+                                            importance of capturing (2)_______. Hemingway is considered a modernist writer because he
+                                            doesn't follow the convention of (3)_______; he uses the (4)_______. The technique of "verbal
+                                            minimalism" is also known as (5)_______.
+                                            <br>
+            
+                                            <b>Palabras clave:</b>
+                                            <ol>
+                                              <li> Imagist</li>
+                                              <li> Time</li>
+                                              <li> Omniscient narrator</li>
+                                              <li> Self effacing narrator</li>
+                                              <li> Iceberg theory</li>
+                                            </ol>
+                                            </p>
+            
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                                          </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                      </div>
+                                      <!-- /.modal-dialog -->
+                                    </div>
+                                  </div>
+                                  <!-- /.box-header -->
+                                  <!-- form start -->
+                                  <form role="form" action="/solicitudEjercicioFG" method="post">
+                                    <div class="box-body">
+                                      <div class="form-group">
+                                        <label>Enunciado:</label>
+                                        <textarea class="form-control" required="true" maxlength="4000" name="enunciadoFG" rows="3" placeholder="Introduce el enunciado del ejercicio, indique los huecos con las estructura 1)_______ , 2)_______ etc... (Max. 4000 caracteres y 9 Palabras clave.)"></textarea>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="numPalabrasFG">Numero de palabras clave:</label>
+                                        <select class="form-control" id="numPalabrasFG" name="numPalabrasFG">
+                                          <option>1</option>
+                                          <option>2</option>
+                                          <option>3</option>
+                                          <option>4</option>
+                                          <option>5</option>
+                                          <option>6</option>
+                                          <option>7</option>
+                                          <option>8</option>
+                                          <option>9</option>
+                                        </select>
+                                      </div>
+                                      <div id="inputsPalabrasClave">
+            
+                                      </div>
+            
+                                      <div class="form-group">
+                                        <label for="contenidoDelEjercicioFG">Contenido/autor de este ejercicio</label>
+                                        <select class="form-control" id="contenidoDelEjercicioFG" name="contenidoDelEjercicioFG">
+                                          <% contents.forEach(function(valor, indice){%>
+                                            <option value="<%-valor.id%>">
+                                              <%-valor.name%>
+                                            </option>
+                                            <%})%>
+                                        </select>
+                                      </div>
+            
+                                    </div>
+                                    <!-- /.box-body -->
+                                    <div class="box-footer">
+                                      <button type="submit" class="btn btn-primary">Aceptar</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                              <!-- /.tab-pane -->
+            
+                              <div class="tab-pane" id="MA">
+                                <div class="box box-primary">
+                                  <div class="box-header with-border">
+                                    <h3 class="box-title">Añadir nuevo ejercicio "Multiple anwser" </h3>
+                                    <br>
+                                    <br>
+                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#descripcionMA">
+                                      Descripción
+                                    </button>
+                                    <div class="modal modal-info fade" id="descripcionMA" style="display: none;">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">×</span>
+                                            </button>
+                                            <h4 class="modal-title">Descripción del ejercicio</h4>
+                                          </div>
+                                          <div class="modal-body">
+                                            <h3> Descripcion:</h3>
+                                            <br>
+                                            <p>Este ejercicio se trata de elegir entre varias respuestas para una pregunta. Varias respuestas
+                                              pueden ser correctas. Al responder la pregunta se le mostrara un 
+                                              ario de por qué cada opcion es o no es correcta</p>
+                                            <br>
+                                            <h3> Ejemplo:</h3>
+                                            <br>
+                                            <b>Enunciado:</b>
+                                            <br> ¿Cuales de los siguientes animales son venenosos?
+                                            <br>
+            
+                                            <b>Posibles respuestas:</b>
+                                            <ol>
+                                              <li class="success"> Cobra real - correcta</li>
+                                              <li> León </li>
+                                              <li class="success"> Viuda negra - correcta</li>
+                                              <li class="success"> Omnitorrinco macho - correcta </li>
+                                              <li> Omnitorrinco hembra</li>
+                                            </ol>
+                                            </p>
+            
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                                          </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                      </div>
+                                      <!-- /.modal-dialog -->
+                                    </div>
+                                  </div>
+                                  <!-- /.box-header -->
+                                  <!-- form start -->
+                                  <form role="form" action="/solicitudEjercicioMA" method="post">
+                                    <div class="box-body">
+                                      <div class="form-group">
+                                        <label>Enunciado:</label>
+                                        <textarea class="form-control" required="true" maxlength="3000" name="enunciadoMA" rows="3" placeholder="Introduce el enunciado del ejercicio, debe ser una pregunta... (Max. 3000 caracteres )"></textarea>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="numRespuestasMA">Numero de respuestas posibles:</label>
+                                        <select class="form-control" id="numRespuestasMA" name="numRespuestasMA">
+                                          <option>1</option>
+                                          <option>2</option>
+                                          <option>3</option>
+                                          <option>4</option>
+                                          <option>5</option>
+                                        </select>
+                                      </div>
+                                      <div id="inputsPosiblesRespuestasMA">
+            
+                                      </div>
+            
+                                      <div class="form-group">
+                                        <label for="contenidoDelEjercicioMA">Contenido/autor de este ejercicio</label>
+                                        <select class="form-control" id="contenidoDelEjercicioMA" name="contenidoDelEjercicioMA">
+                                          <% contents.forEach(function(valor, indice){%>
+                                            <option value="<%-valor.id%>">
+                                              <%-valor.name%>
+                                            </option>
+                                            <%})%>
+                                        </select>
+                                      </div>
+            
+                                    </div>
+                                    <!-- /.box-body -->
+                                    <div class="box-footer">
+                                      <button type="submit" class="btn btn-primary">Aceptar</button>
+                                    </div>
+                                  </form>
+                                </div>
+            
+                              </div>
+                              <!-- /.tab-pane -->
+                              <div class="tab-pane" id="DQ">
+                                <div class="box box-primary">
+                                  <div class="box-header with-border">
+                                    <h3 class="box-title">Añadir nuevo ejercicio "Direct Question" </h3>
+                                    <br>
+                                    <br>
+                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#descripcionDQ">
+                                      Descripción
+                                    </button>
+                                    <div class="modal modal-info fade" id="descripcionDQ" style="display: none;">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">×</span>
+                                            </button>
+                                            <h4 class="modal-title">Descripción del ejercicio</h4>
+                                          </div>
+                                          <div class="modal-body">
+                                            <h3> Descripcion:</h3>
+                                            <br>
+                                            <p>En este ejercicio el usuario deberá responder a una pregunta. La pregunta escrita deberá
+                                              tener una respuesta clara y concisa, que no de posibilidad a otras respuestas.</p>
+                                            <br>
+                                            <h3> Ejemplo:</h3>
+                                            <br>
+                                            <b>Enunciado:</b>
+                                            <br> ¿En que año comenzó la guerra civil Española?
+                                            <br>
+            
+                                            <b>Respuesta:</b> 1936
+            
+                                            </p>
+            
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                                          </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                      </div>
+                                      <!-- /.modal-dialog -->
+                                    </div>
+                                  </div>
+                                  <!-- /.box-header -->
+                                  <!-- form start -->
+                                  <form role="form" action="/solicitudEjercicioDQ" method="post">
+                                    <div class="box-body">
+                                      <div class="form-group">
+                                        <label>Enunciado:</label>
+                                        <textarea class="form-control" required="true" maxlength="1500" name="enunciadoDQ" rows="3" placeholder="Introduce el enunciado del ejercicio ... (Max. 1500 caracteres)"></textarea>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="respuestaDQ">Respuesta: </label>
+                                        <input type="text" class="form-control" required="true" maxlength="200" name="respuestaDQ" id="respuestaDQ" placeholder="Respuesta">
+                                      </div>
+            
+                                      <div class="form-group">
+                                        <label for="contenidoDelEjercicioDQ">Contenido/autor de este ejercicio</label>
+                                        <select class="form-control" id="contenidoDelEjercicioDQ" name="contenidoDelEjercicioDQ">
+                                          <% contents.forEach(function(valor, indice){%>
+                                            <option value="<%-valor.id%>">
+                                              <%-valor.name%>
+                                            </option>
+                                            <%})%>
+                                        </select>
+                                      </div>
+            
+                                    </div>
+                                    <!-- /.box-body -->
+                                    <div class="box-footer">
+                                      <button type="submit" class="btn btn-primary">Aceptar</button>
+                                    </div>
+                                  </form>
+                                </div>
+                                <!-- /.box -->
+                              </div>
+                              <div class="tab-pane" id="OS">
+                                <div class="box box-primary">
+                                  <div class="box-header with-border">
+                                    <h3 class="box-title">Añadir nuevo ejercicio "Order Sentences" </h3>
+                                    <br>
+                                    <br>
+                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#descripcionOS">
+                                      Descripción
+                                    </button>
+                                    <div class="modal modal-info fade" id="descripcionOS" style="display: none;">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">×</span>
+                                            </button>
+                                            <h4 class="modal-title">Descripción del ejercicio</h4>
+                                          </div>
+                                          <div class="modal-body">
+                                            <h3> Descripcion:</h3>
+                                            <br>
+                                            <p>En este ejercicio el usuario deberá introducir el orden correcto de las frases que se le
+                                              muestran.
+                                            </p>
+                                            <br>
+                                            <p>El "orden real", será el correcto, y el "orden a mostrar" será el orden en el que le aparecerán
+                                              las frases al usuario</p>
+                                            <h3> Ejemplo:</h3>
+                                            <br>
+                                            <b>Enunciado:</b>
+                                            <br> Place sentences in chronological order:
+                                            <br>
+                                            <b>Frases:</b>
+                                            <br>
+                                            <ul>
+                                              <li>A document saying that if something happens to Dr Jekyll, this Doctor's estate will be
+                                                of Mr Hyde's property.</li>
+                                              <li>Dr Jekyll's narrative is read by Mr Utterson.</li>
+                                              <li>Dr Jekyll writes to Mr Utterson saying that his friendship with Dr Lanyon is now over.</li>
+                                              <li>A letter to Mr Utterson is retrieved from the old man corpse.</li>
+                                              <li>Mr Utterson reads a document written by Dr Jekyll with instructions on the reading order
+                                                of certain documents.</li>
+                                              <li>Mr Utterson opens Lanyon's envelope and finds another envelope.</li>
+            
+                                            </ul>
+                                            <b>Respuesta:</b>
+                                            <ul>
+                                              <li>A document saying that if something happens to Dr Jekyll, this Doctor's estate will be
+                                                of Mr Hyde's property.
+                                                <p class="success"> -1</p>
+                                              </li>
+                                              <li>Dr Jekyll's narrative is read by Mr Utterson.
+                                                <p class="success"> -6</p>
+                                              </li>
+                                              <li>Dr Jekyll writes to Mr Utterson saying that his friendship with Dr Lanyon is now over.
+                                                <p class="success"> -3</p>
+                                              </li>
+                                              <li>A letter to Mr Utterson is retrieved from the old man corpse.
+                                                <p class="success"> -2</p>
+                                              </li>
+                                              <li>Mr Utterson reads a document written by Dr Jekyll with instructions on the reading order
+                                                of certain documents.
+                                                <p class="success"> -5</p>
+                                              </li>
+                                              <li>Mr Utterson opens Lanyon's envelope and finds another envelope.
+                                                <p class="success"> -4</p>
+                                              </li>
+                                            </ul>
+                                            </p>
+            
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                                          </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                      </div>
+                                      <!-- /.modal-dialog -->
+                                    </div>
+                                  </div>
+                                  <!-- /.box-header -->
+                                  <!-- form start -->
+                                  <form role="form" action="/solicitudEjercicioOS" method="post">
+                                    <div class="box-body">
+                                      <div class="form-group">
+                                        <label>Enunciado:</label>
+                                        <textarea class="form-control" required="true" maxlength="1500" name="enunciadoOS" rows="3" placeholder="Introduce el enunciado del ejercicio ... (Max. 1500 caracteres )"></textarea>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="numFrasesOS">Numero de frases:</label>
+                                        <select class="form-control" id="numFrasesOS" name="numFrasesOS">
+                                          <option>1</option>
+                                          <option>2</option>
+                                          <option>3</option>
+                                          <option>4</option>
+                                          <option>5</option>
+                                          <option>6</option>
+                                        </select>
+                                      </div>
+                                      <div id="inputsFrasesOS">
+            
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="contenidoDelEjercicioOS">Contenido/autor de este ejercicio</label>
+                                        <select class="form-control" id="contenidoDelEjercicioOS" name="contenidoDelEjercicioOS">
+                                          <% contents.forEach(function(valor, indice){%>
+                                            <option value="<%-valor.id%>">
+                                              <%-valor.name%>
+                                            </option>
+                                            <%})%>
+                                        </select>
+                                      </div>
+            
+                                    </div>
+                                    <!-- /.box-body -->
+                                    <div class="box-footer">
+                                      <button type="submit" class="btn btn-primary">Aceptar</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                              <div class="tab-pane" id="PW">
+                                <div class="box box-primary">
+                                  <div class="box-header with-border">
+                                    <h3 class="box-title">Añadir nuevo ejercicio "Pair words" </h3>
+                                    <br>
+                                    <br>
+                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#descripcionPW">
+                                      Descripción
+                                    </button>
+                                    <div class="modal modal-info fade" id="descripcionPW" style="display: none;">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">×</span>
+                                            </button>
+                                            <h4 class="modal-title">Descripción del ejercicio</h4>
+                                          </div>
+                                          <div class="modal-body">
+                                            <h3> Descripcion:</h3>
+                                            <br>
+                                            <p>En este ejercicio el usuario debe relacionar conceptos afines y emparejarlos de la manera
+                                              adecuada
+                                            </p>
+                                            <br>
+                                            <p></p>
+                                            <h3> Ejemplo:</h3>
+                                            <br>
+                                            <b>Enunciado:</b>
+                                            <br> Match the characters with their role in the story:
+                                            <br>
+                                            <b>Conceptos:</b>
+                                            <br>
+                                            <ul>
+                                              <li>Dr Jekyll.</li>
+                                              <li>Mr Hyde.</li>
+                                              <li>Mr Utterson.</li>
+                                            </ul>
+                                            <br>
+                                            <ul>
+                                              <li>The narrator.</li>
+                                              <li>The scientist</li>
+                                              <li>The beast inside of men</li>
+                                            </ul>
+                                            <b>Respuesta:</b>
+                                            <ul>
+                                              <li>Dr Jekyll --- The scientist </li>
+                                              <li>Mr Hyde --- The beast inside of men</li>
+                                              <li>Mr Utterson --- The narrator</li>
+                                            </ul>
+                                            </p>
+            
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                                          </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                      </div>
+                                      <!-- /.modal-dialog -->
+                                    </div>
+                                  </div>
+                                  <!-- /.box-header -->
+                                  <!-- form start -->
+                                  <form role="form" action="/solicitudEjercicioPW" method="post">
+                                    <div class="box-body">
+                                      <div class="form-group">
+                                        <label>Enunciado:</label>
+                                        <textarea class="form-control" required="true" maxlength="1500" name="enunciadoPW" rows="3" placeholder="Introduce el enunciado del ejercicio ... (Max. 1500 caracteres )"></textarea>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="numConceptosPW">Numero de parejas de conceptos:</label>
+                                        <select class="form-control" id="numConceptosPW" name="numConceptosPW">
+                                          <option>1</option>
+                                          <option>2</option>
+                                          <option>3</option>
+                                          <option>4</option>
+                                          <option>5</option>
+                                        </select>
+                                      </div>
+                                      <div id="inputsConceptosPW">
+            
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="contenidoDelEjercicioPW">Contenido/autor de este ejercicio</label>
+                                        <select class="form-control" id="contenidoDelEjercicioPW" name="contenidoDelEjercicioPW">
+                                          <% contents.forEach(function(valor, indice){%>
+                                            <option value="<%-valor.id%>">
+                                              <%-valor.name%>
+                                            </option>
+                                            <%})%>
+                                        </select>
+                                      </div>
+            
+                                    </div>
+                                    <!-- /.box-body -->
+                                    <div class="box-footer">
+                                      <button type="submit" class="btn btn-primary">Aceptar</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                              <div class="tab-pane" id="RT">
+                                <div class="box box-primary">
+                                  <div class="box-header with-border">
+                                    <h3 class="box-title">Añadir nuevo ejercicio "Recognise the Text" </h3>
+                                    <br>
+                                    <br>
+                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#descripcionRT">
+                                      Descripción
+                                    </button>
+                                    <div class="modal modal-info fade" id="descripcionRT" style="display: none;">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">×</span>
+                                            </button>
+                                            <h4 class="modal-title">Descripción del ejercicio</h4>
+                                          </div>
+                                          <div class="modal-body">
+                                            <h3> Descripcion:</h3>
+                                            <br>
+                                            <p>En este ejercicio al usuario se le presenta un texto, y debe elegir entre varias opciones
+                                              el titulo y el tema de dicho texto
+                                            </p>
+                                            <br>
+                                            <p></p>
+                                            <h3> Ejemplo:</h3>
+                                            <br>
+                                            <b>Enunciado/texto:</b>
+                                            <br>
+                                            <p>When I got up to my little room and said my prayers, I did not forget Joe's recommendation,
+                                              and yet my young mind was in that disturbed and unthankful state, that I thought long after
+                                              I laid me down, how common Estella would consider Joe, a mere blacksmith; how thick his
+                                              boots, and how coarse his hands. I thought how Joe and my sister were then sitting in the
+                                              kitchen, and how I had come up to bed from the kitchen, and how Miss Havisham and Estella
+                                              never sat in a kitchen, but were far above the level of such common doings. I fell asleep
+                                              recalling what I "used to do" when I was at Miss Havisham's; as though I had been there
+                                              weeks or months, instead of hours; and as though it were quite an old subject of remembrance,
+                                              instead of one that had arisen only that day.</p>
+                                            <br>
+                                            <b>Titulos:</b>
+                                            <br>
+                                            <ul>
+                                              <li>Great Expectations.</li>
+                                              <li>Oliver Twist.</li>
+                                              <li>David Copperfield.</li>
+                                            </ul>
+                                            <br>
+                                            <b>Temas:</b>
+                                            <br>
+                                            <ul>
+                                              <li>The main character dislike their jobs.</li>
+                                              <li>Orphans and social class.</li>
+                                              <li>Dickens explains the reason of his success.</li>
+                                            </ul>
+                                            <b>Respuesta:</b>
+                                            <ul>
+                                              <li>Titulo: Great Expectations</li>
+                                              <li>Tema: The main character dislike their jobs</li>
+                                            </ul>
+                                            </p>
+            
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                                          </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                      </div>
+                                      <!-- /.modal-dialog -->
+                                    </div>
+                                  </div>
+                                  <!-- /.box-header -->
+                                  <!-- form start -->
+                                  <form role="form" action="/solicitudEjercicioRT" method="post">
+                                    <div class="box-body">
+                                      <div class="form-group">
+                                        <label>Enunciado:</label>
+                                        <textarea class="form-control" required="true" maxlength="1500" name="enunciadoRT" rows="3" placeholder="Introduce el enunciado del ejercicio ... (Max. 1500 caracteres )"></textarea>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="numConceptosRT">Numero de titulos y temas:</label>
+                                        <select class="form-control" id="numConceptosRT" name="numConceptosRT">
+                                          <option>1</option>
+                                          <option>2</option>
+                                          <option>3</option>
+                                          <option>4</option>
+                                          <option>5</option>
+                                        </select>
+                                      </div>
+                                      <div id="inputsConceptosRT">
+            
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="contenidoDelEjercicioRT">Contenido/autor de este ejercicio</label>
+                                        <select class="form-control" id="contenidoDelEjercicioRT" name="contenidoDelEjercicioRT">
+                                          <% contents.forEach(function(valor, indice){%>
+                                            <option value="<%-valor.id%>">
+                                              <%-valor.name%>
+                                            </option>
+                                            <%})%>
+                                        </select>
+                                      </div>
+            
+                                    </div>
+                                    <!-- /.box-body -->
+                                    <div class="box-footer">
+                                      <button type="submit" class="btn btn-primary">Aceptar</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+            
+                            </div>
+                            <!-- /.tab-content -->
+                          </div>
+                          <!-- /.nav-tabs-custom -->
+                        </div>
+                        <!-- /.col -->
+                      </div>
+
+
+                 </div>
+            <!-- /.box-body -->
+
+
+            <div class="box-footer">
+
+            </div>
+            <!-- /.box-footer-->
+          </div>
+          <!-- /.box -->
+
+        </section>
+        <!-- /.content -->
+      </div>
+      <!-- ==================================  CONTENT =================================================== -->
+      <footer class="main-footer">
+        <% include ../partials/footer %>
+      </footer>
+
+      <aside class="control-sidebar control-sidebar-dark">
+        <% include ../partials/sidebar%>
+      </aside>
+
+      <div class="control-sidebar-bg"></div>
+    </div>
+
+
+    <% include ../partials/tail %>

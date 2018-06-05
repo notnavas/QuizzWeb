@@ -1,0 +1,116 @@
+<!-- Logo -->
+<a href="/perfil" class="logo">
+  <!-- mini logo for sidebar mini 50x50 pixels -->
+  <span class="logo-mini">
+    <b>Q</b>Tch</span>
+  <!-- logo for regular state and mobile devices -->
+  <span class="logo-lg">
+    <b>Quizz</b>Teacher</span>
+</a>
+
+<!-- Header Navbar: style can be found in header.less -->
+<nav class="navbar navbar-static-top" role="navigation">
+  <!-- Sidebar toggle button-->
+  <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+    <span class="sr-only">Toggle navigation</span>
+  </a>
+  <!-- Navbar Right Menu -->
+  <div class="navbar-custom-menu">
+    <ul class="nav navbar-nav">
+
+      <!-- Notifications: style can be found in dropdown.less -->
+      <li class="dropdown notifications-menu">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          <i class="fa fa-bell-o"></i>
+          <span class="label label-warning"><%- user.numSolicitudes %></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li class="header">Tienes <%- user.numSolicitudes %> notificaciones</li>
+          <li>
+            <!-- inner menu: contains the actual data -->
+            <ul class="menu">
+              <li>
+                <a href="#">
+                  <i class="fa fa-users text-aqua"></i> X alumnos nuevos en tu clase!
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <i class="fa  fa-pencil-square-o text-green"></i> <%- user.numSolicitudes %> solicitudes pendientes.
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <!-- Tasks: style can be found in dropdown.less -->
+      
+      <!-- User Account: style can be found in dropdown.less -->
+      <li class="dropdown user user-menu">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          <img src="/img/avatar2.png" class="user-image" alt="User Image">
+          <span class="hidden-xs">
+            <%- user.name %>
+          </span>
+        </a>
+        <ul class="dropdown-menu">
+          <!-- User image -->
+          <li class="user-header">
+            <img src="/img/avatar2.png" class="img-circle" alt="User Image">
+
+            <p>
+              <%- user.name %> -
+                <%- user.role %>
+            </p>
+          </li>
+          <!-- Menu Body -->
+          <li class="user-body">
+            <div class="row">
+              <div class="col-xs-4 text-center">
+                <span>Clases</span>
+              </div>
+              <div class="col-xs-4 text-center">
+                <span>Alumnos</span>
+              </div>
+              <div class="col-xs-4 text-center">
+                <span>Nota</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-4 text-center">
+                <span>
+                  <%- user.numClases %>
+                </span>
+              </div>
+              <div class="col-xs-4 text-center">
+                <span>
+                  <%- user.numAlumnos %>
+                </span>
+              </div>
+              <div class="col-xs-4 text-center">
+                <span>4.5</span>
+              </div>
+            </div>
+            <!-- /.row -->
+          </li>
+          <!-- Menu Footer-->
+          <li class="user-footer">
+            <div class="pull-left">
+              <a href="#" class="btn btn-default btn-flat">Profile</a>
+            </div>
+            <div class="pull-right">
+              <a href="/logout" class="btn btn-default btn-flat">Desconectarse</a>
+            </div>
+          </li>
+        </ul>
+      </li>
+      <!-- Control Sidebar Toggle Button -->
+      <li>
+        <a href="#" data-toggle="control-sidebar">
+          <i class="fa fa-gears"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</nav>

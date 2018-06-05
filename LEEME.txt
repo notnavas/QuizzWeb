@@ -1,0 +1,45 @@
+﻿Alvaro Navas Sanchez - 10/05/2018.
+
+CONTENIDO DESARROLLADO:
+    1- MODULO DEL PROFESOR
+        En el modulo del profesor es posible visualizar sus clases, alumnos, secciones y contenidos de estas. 
+        Tambien es posible crear nuevas Clases,secciones y contenidos.
+        Se pueden visualizar tambien solicitudes de Ejercicios y contenidos realizados por alumnos y aceptar/rechazar estos, para
+        añadirlos a la aplicacion. Una vez aceptados serán visibles para todos los miembros de su clase correspondiente.
+         Desoues de aceptarlos, se pueden formar test con los ejercicios aceptados, y relacionar este test con su cotenido correspondiente
+         lo cual permite hacer estos test y ejercicios desde la app.
+         - Al aceptar un ejercicio guardar que alumno lo ha enviado para posteriores estadisticas 
+        - Visualizar estadisticas de clases/alumnos/contenidos -> estadisticas muy simples, pero adaptables para añadir estadisticas mas complejas 
+          de forma visual y sencilla
+    2-MODULO DE LOS ALUMNOS
+        Es posible añadir nuevos ejercicios y contenidos a las clases de las que eres alumnos, al crearlos se le envia una solicitud 
+        al profesor correspondiente, y si este los acepta se añaden a la clase de forma definitiva.
+        -Ver estadisticas propias
+    Un chat interno de clase que permite comunicarse a toda la clase
+PENDIENTE:
+    GENERAL:  Mejorar la validación de usuarios y los mensajes de error que se le muestran al usuario. 
+
+
+    1- MODULO DEL PROFESOR  
+        - Conseguir insertar imagenes de tipo blob en la BBDD. (Contents)
+        - COPIAR CONTENIDO DE UNA CLASE A OTRA 
+    2- MODULO DEL ALUMNOS
+        -//done
+    3- APP Android
+        - Guardar datos de los test y alumnos, la nota que sacan estos en cada test, cuantos hacen etc... (Rellenar tablas: anwser_question y anwser_test de la BD )
+        - Si hay tiempo, nuevos tipos de ejercicio
+PASSWORDS PARA TESTEO:
+    PROFESORES:     
+        - angie@ucm.es:1234
+        - aaa@aaa.com:1234
+    ALUMNOS: 
+        - adol@ucm.es:1234 -> es alumno de ambos profesores y puede crear contenido para varias clases 
+
+PUERTO: La aplicación se lanza en el puerto 3000 -> localhost:3000
+
+BBDD: Importar la BBDD, no es igual que la anterior, hay mas tablas.
+
+EJECUCION: 
+	- iniciar Apache/Sql en Xampp
+	- nmp install
+	- node app.js
