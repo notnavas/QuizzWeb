@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
+var fs = require('fs');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var config = require("./config");
@@ -13,6 +14,10 @@ var upload = multer({ dest: 'public/img/' });
 var session = require('express-session');
 var MySQLStore = require('express-mysql-session')(session);
 var Chart = require('chart.js');
+// Necesario para el parseador
+var docx4js = require("docx4js");
+var WordExtractor = require("word-extractor");
+var extractor = new WordExtractor();
 var app = express();
 
 // view engine setup
@@ -454,6 +459,7 @@ app.post('/crearContenido', authProf, upload.single('imagenContenido'), function
       response.end();
     }
     else {
+      
       response.redirect('/infoClase?id=' + idClase);
       response.status(400);
       response.end();
@@ -1184,19 +1190,19 @@ app.get('/inicioAlumno', authStud, function (request, response) {
               console.log(clases);
               console.log(sections);
               console.log(contribuciones);
-              response.render("pages/inicioAlumno", { errores: errores, user: user, clases: clases, sections: sections,estadisticas: estadisticas , contribuciones: contribuciones });
+              response.render("pages/inicioAlumno", { errores: errores, user: user, clases: clases, sections: sections, estadisticas: estadisticas, contribuciones: contribuciones });
               response.status(200);
               response.end();
             }
             else {
-              response.render("pages/inicioAlumno", { errores: errores, user: user, clases: clases, sections: sections,estadisticas: estadisticas , contribuciones: contribuciones });
+              response.render("pages/inicioAlumno", { errores: errores, user: user, clases: clases, sections: sections, estadisticas: estadisticas, contribuciones: contribuciones });
               response.status(204);
               response.end();
             }
           });
         }
         else {
-          response.render("pages/inicioAlumno", { errores: errores, user: user, clases: clases, sections: sections,estadisticas: estadisticas , contribuciones: contribuciones });
+          response.render("pages/inicioAlumno", { errores: errores, user: user, clases: clases, sections: sections, estadisticas: estadisticas, contribuciones: contribuciones });
           response.status(204);
           response.end();
         }
@@ -1204,7 +1210,7 @@ app.get('/inicioAlumno', authStud, function (request, response) {
     });
 
   });
-  
+
 
 });
 //VOY POR AQUI
@@ -1414,7 +1420,7 @@ app.post('/solicitudEjercicioFG', authStud, function (request, response) {
     arrayPalabrasClave.push(eval(cadEvalMod));
 
   }
-  
+
   console.log(enunciado);
   console.log(numPalabras);
   console.log(arrayPalabrasClave);
@@ -1806,8 +1812,684 @@ app.get('/logout', function (request, response) {
   request.session.destroy();
   response.redirect('/');
 });
-// puerto 3000
-/*app.listen(config.port, function () {
-  console.log("Servidor arrancado en el puerto " + config.port.toString());
-});*/
-module.exports = app;
+
+/*******************************************************************************************************************************************/
+/*******************************************************************************************************************************************/
+/****************************PARTE DE LA APLICACIÓN DESTINADA A PARSER DE DOCUMENTOS WORD***************************************************/
+/*******************************************************************************************************************************************/
+/*******************************************************************************************************************************************/
+
+
+
+
+// llamada get al parser 
+app.post('/parser', authProf, upload.single('documentoWord'), function (request, response) {
+  var user;
+  var clases = [];
+  var doc = ""; //ruta del archivo.
+  var idClase = request.body.idClaseActual;
+  var documentoWord = request.file.path;//
+  var idSeccion =request.body.seccionContenidoWord; //seccion de prueba.
+
+  user = request.session.user;
+  fs.renameSync(documentoWord, documentoWord+".doc");
+  documentoWord = documentoWord+".doc";
+  console.log(idSeccion);  
+  console.log(documentoWord);  
+  console.log();
+  parser(documentoWord, idSeccion);
+
+  response.redirect('/infoClase?id=' + idClase);
+  response.status(200);
+  response.end();
+  console.log("FINALIZADO");
+});
+
+  function parser(doc, idSeccionContenido) {
+    var extracted = extractor.extract(doc);
+    extracted.then(function (doc) {
+      var posFinal = doc.getBody().length;
+
+      var body = doc.getBody();
+
+      var comprobacion = 0;
+      // while (comprobacion !== 2)
+      // {
+      var pos = body.search("\n");
+
+      // Nombre final 
+      console.log("\n" + "Nombre del notas");
+      var name = body.substr(0, pos);
+      console.log(name);
+
+      var tituloContenido = name;
+
+      pos++;
+      body = body.substr(pos, posFinal);
+      pos = body.search("\n");
+
+      body = body.substr(pos + 1, posFinal);
+      pos = body.search("EXERCICES");
+
+      // Introducción final
+      console.log("\n" + "Introducción del asunto");
+      var introduction = body.substr(0, pos);
+      console.log(introduction);
+
+      var descripcionContenido = introduction;
+
+      body = body.substr(pos + 2, posFinal);
+      pos = body.search("\n");
+      body = body.substr(pos + 1, posFinal);
+
+      var idContentAux;
+
+      db.insertarContenido(tituloContenido, descripcionContenido, idSeccionContenido, null, "null", function (err, result) {
+        if (result) {
+          idContentAux = result;
+
+          var numCuestions = 0;
+
+          // Se comprueba si hay preguntas del tipo "Multiple answer"
+          pos = body.search("Multiple answer");
+          comprobacion++;
+          if (pos !== -1) {
+            numCuestions++;
+            var ejercicio = new Object();
+            ejercicio.type = "MA";
+            ejercicio.idContent = idContentAux;
+
+            var posB = ("Multiple answer").length;
+            body = body.substr(pos + posB + 1, posFinal);
+
+            var n = body.search("\n");
+
+            // Pregunta "Multiple answer" final
+            console.log("\n" + "Pregunta Multiple answer");
+            var questionMC = body.substr(0, n);
+            console.log(questionMC);
+
+            ejercicio.statement = questionMC;
+
+            body = body.substr(n + 1, posFinal);
+
+            pos = body.search("Answer:");
+
+            n = body.search("\n");
+
+            var choices = new Array();
+
+            var aux = 0;
+            var jambo = body.substr(0, pos);
+            while (n < pos) {
+              console.log("\n" + "Respuesta " + (aux + 1) + " Multiple answer");
+              var choice = new Object();
+              choice.description = body.substr(0, n);
+              console.log(choice.description);
+              choices.push(choice);
+              body = body.substr(n + 2);
+              n = body.search("\n");
+              pos = body.search("Answer:");
+              ++aux;
+            }
+
+
+            body = body.substr(n + 1, posFinal);
+
+            n = body.search("\n");
+
+            for (var i = 0; i < aux; ++i) {
+              var incorrect = body.search("INCORRECT");
+              var correct = body.search("CORRECT");
+
+              if (incorrect < correct && incorrect !== -1) {
+                choices[i].correct = 0;
+              }
+              else if (correct < incorrect && correct !== -1) {
+                choices[i].correct = 1;
+              }
+              n = body.search("\n");
+              pos = body.search(":") + 2;
+              choices[i].comment = body.substr(pos, n - pos);
+              console.log(body.substr(pos, n - pos));
+              body = body.substr(n + 1);
+            }
+
+
+            ejercicio.parteEspecifica = choices;
+
+            db.aceptarSolicitudEjercicio(ejercicio, function (err, result) {
+              if (result)
+                console.log("Correcto");
+              else
+                console.log("Error");
+            });
+
+          }
+
+          // Se comprueba si hay preguntas del tipo "True or false"
+          pos = body.search("True or false");
+          comprobacion++;
+          if (pos !== -1) {
+            numCuestions++;
+            var ejercicio = new Object();
+            ejercicio.type = "TF";
+            ejercicio.idContent = idContentAux;
+
+            var parteEspecifica =
+              {
+                comment: "",
+                correct: ""
+              };
+
+            body = body.substr(pos);
+            n = body.search("\n");
+
+            body = body.substr(n + 1);
+            n = body.search("-");
+            body = body.substr(n + 2);
+
+            n = body.search("\n");
+
+            // Pregunta "True or false" final
+            console.log("\n" + "Pregunta True or false");
+            var preguntaTrueOrFalse = body.substr(0, n);
+            console.log(preguntaTrueOrFalse);
+
+            ejercicio.statement = preguntaTrueOrFalse;
+
+            body = body.substr(n + 1);
+
+            var falsoVerdadero = 0;
+            var explicacionTrueFalse;
+            if (body.search("TRUE") !== -1) {
+              falsoVerdadero = 1;
+              body = body.substr(body.search("TRUE"));
+
+              pos = body.search(":");
+              body = body.substr(pos + 2);
+
+              n = body.search("\n");
+
+              // Explicación "True or false" final
+              console.log("\n" + "Explicación True or false");
+              explicacionTrueFalse = body.substr(0, n);
+              console.log(explicacionTrueFalse);
+            }
+            else {
+              body = body.substr(body.search("FALSE"));
+
+              pos = body.search(":");
+              body = body.substr(pos + 2);
+
+              n = body.search("\n");
+
+              // Explicación "True or false" final
+              console.log("\n" + "Explicación True or false");
+              var explicacionTrueFalse = body.substr(0, n);
+              console.log(explicacionTrueFalse);
+            }
+
+            parteEspecifica.correct = falsoVerdadero;
+            parteEspecifica.comment = explicacionTrueFalse;
+
+            ejercicio.parteEspecifica = parteEspecifica;
+
+            db.aceptarSolicitudEjercicio(ejercicio, function (err, result) {
+              if (result) {
+                console.log("Correcto");
+                //callback(null);
+              }
+              else {
+                console.log(err);
+                //callback(err);
+              }
+            });
+          }
+
+          //Se comprueba si hay preguntas del tipo "Fill in the gaps"
+          pos = body.search("Fill in the gaps");
+          comprobacion++;
+          if (pos !== -1) {
+
+            numCuestions++;
+            var ejercicio = new Object();
+            ejercicio.type = "FG";
+            ejercicio.idContent = idContentAux;
+
+            var parteEspecifica;
+
+            var array = new Array();
+
+            body = body.substr(pos);
+            n = body.search("\n");
+            body = body.substr(n + 1);
+            n = body.search("\n");
+            console.log("\n" + "Enunciado Fill In The Gaps");
+            var fillGaps = body.substr(0, n);
+            console.log(fillGaps);
+
+            body = body.substr(n + 1);
+            n = body.search("\n");
+
+            // Texto con huecos
+            console.log("\n" + "Texto con huecos");
+            var textoHuecos = body.substr(0, n);
+            console.log(textoHuecos);
+
+            ejercicio.statement = textoHuecos;
+
+            body = body.substr(n + 1);
+            body = body.substr(body.search("\n") + 1);
+
+            // Creamos un array con las palabras posibles
+            var words = new Array();
+            n = body.search("\n");
+            var s = body.search(" ");
+            i = 0;
+            while (n < s) {
+              parteEspecifica = new Object();
+
+              words.push(body.substr(0, n));
+
+              parteEspecifica.gap_number = i + 1;
+              parteEspecifica.concept = body.substr(0, n);
+
+              array.push(parteEspecifica);
+
+              // Palabras a guardar
+              if (words[i] !== "") {
+                console.log("\n" + "Palabra " + (i + 1));
+                console.log(words[i]);
+              }
+
+              ++i;
+              body = body.substr(n + 1);
+              n = body.search("\n");
+              s = body.search(" ");
+            }
+            array.pop();
+
+            ejercicio.parteEspecifica = array;
+
+            db.aceptarSolicitudEjercicio(ejercicio, function (err, result) {
+              if (result)
+                console.log("Correcto");
+              else
+                console.log("Error");
+            });
+          }
+
+          // Se comprueba si hay preguntas del tipo "Pair Words"
+          pos = body.search("Pair words");
+          comprobacion++;
+          if (pos !== -1) {
+            numCuestions++;
+            var ejercicio = new Object();
+            ejercicio.type = "PW";
+            ejercicio.idContent = idContentAux;
+
+            var arrayConceptos = new Array();
+
+            body = body.substr(pos);
+
+            n = body.search("\n");
+            body = body.substr(n + 1);
+
+            n = body.search("\n");
+            var enunciado = body.substr(0, n);
+            ejercicio.statement = enunciado;
+
+            body = body.substr(n + 1);
+            pos = body.search("Answer:");
+            var prueba = body.substr(0, pos);
+
+            var num = 1;
+            var numeros = new Array();
+            var letras = new Array();
+
+            while (prueba !== "") {
+              n = prueba.search(num.toString()) + 3;
+              pos = prueba.search("\t");
+              var numero = (prueba.substr(n, pos - 2)).replace(/^\s*|\s*$/g, "");
+              numeros.push(numero);
+              // Números
+              console.log("\n" + "Palabra del número " + num.toString());
+              console.log(numeros[num - 1]);
+              prueba = prueba.substr(pos);
+              n = prueba.search("\n");
+              var letra = (prueba.substr(0, n)).replace(/^\s*|\s*$/g, "");
+              letras.push(letra);
+              // Letras
+              console.log("\n" + "Palabra de la letra " + num.toString());
+              console.log(letras[num - 1]);
+              prueba = prueba.substr(n + 1);
+              num++;
+            }
+            /*pos = body.search("Answer:");
+            body = body.substr(pos);
+            pos = body.search("\n");
+            body = body.substr(pos + 1);*/
+
+            n = body.search("1");
+            body = body.substr(n + 3);
+
+            n = body.search("Answer:");
+            n = n + 8;
+            s = body.search("\n");
+            i = 0;
+
+            body = body.substr(n);
+            //console.log(body);
+
+            for (var i = 0; i < numeros.length; ++i) {
+
+              var concepto1 = numeros[i];
+              //console.log(concept1 + "\n");
+              console.log("numero " + (i + 1) + ": " + concepto1 + "\n");
+              //console.log(body);
+              s = body.search("-");
+              //console.log(s);
+              body = body.substr(s + 1);
+              //console.log(body);
+              var concepto2 = correspondencia(body.substr(0, 1));
+              //console.log(concept2 + "\n");
+              console.log("letra " + (i + 1) + ": " + letras[concepto2 - 1] + "\n");
+
+              /*var numero = numeros[i];
+              var letra = correspondencia(letras[i]);*/
+
+              var parteEspecifica = {
+                concept1: concepto1,
+                concept2: letras[concepto2 - 1]
+              };
+
+              arrayConceptos.push(parteEspecifica);
+            }
+
+            ejercicio.parteEspecifica = arrayConceptos;
+
+            db.aceptarSolicitudEjercicio(ejercicio, function (err, result) {
+              if (result)
+                console.log("Correcto");
+              else
+                console.log("Error");
+            });
+
+          }
+
+          // Se comprueba si hay preguntas del tipo "Direct Questions"
+          pos = body.search("Direct questions");
+          comprobacion++;
+          if (pos !== -1) {
+
+            numCuestions++;
+            var ejercicio = new Object();
+            ejercicio.type = "DQ";
+            ejercicio.idContent = idContentAux;
+
+            var parteEspecifica = new Object();
+
+            body = body.substr(pos);
+            n = body.search("\n");
+            body = body.substr(n + 4);
+
+            n = body.indexOf("?") + 1;
+
+            // Pregunta 1 Direct Question Final
+            console.log("\n" + "Pregunta directa A");
+            var preguntaA = body.substr(0, n);
+            console.log(preguntaA);
+
+            ejercicio.statement = preguntaA;
+
+            n = body.indexOf(":") + 2;
+            body = body.substr(n);
+            n = body.search("\n");
+
+            // Respuesta 1 Direct Question Final
+            console.log("\n" + "Respuesta directa A");
+            var respuestaA = body.substr(0, n);
+            console.log(respuestaA);
+
+            parteEspecifica.answer = respuestaA;
+
+            ejercicio.parteEspecifica = parteEspecifica;
+
+            db.aceptarSolicitudEjercicio(ejercicio, function (err, result) {
+              if (result)
+                console.log("Correcto");
+              else
+                console.log("Error");
+            });
+
+            body = body.substr(n + 4);
+
+            n = body.indexOf("?") + 1;
+
+            ejercicio = new Object();
+            ejercicio.type = "DQ";
+            ejercicio.idContent = idContentAux;
+            parteEspecifica = new Object();
+
+            // Pregunta 2 Direct Question Final
+            console.log("\n" + "Pregunta directa B");
+            var preguntaB = body.substr(0, n);
+            console.log(preguntaB);
+
+            ejercicio.statement = preguntaB;
+
+            n = body.indexOf(":") + 2;
+            body = body.substr(n);
+            n = body.search("\n");
+
+            // Respuesta 2 Direct Question Final
+            console.log("\n" + "Respuesta directa B");
+            var respuestaB = body.substr(0, n);
+            console.log(respuestaB);
+
+            parteEspecifica.answer = respuestaB;
+
+            ejercicio.parteEspecifica = parteEspecifica;
+
+            db.aceptarSolicitudEjercicio(ejercicio, function (err, result) {
+              if (result)
+                console.log("Correcto");
+              else
+                console.log("Error");
+            });
+
+            body = body.substr(n + 4);
+
+            n = body.indexOf("?") + 1;
+
+            ejercicio = new Object();
+            ejercicio.type = "DQ";
+            ejercicio.idContent = idContentAux;
+            parteEspecifica = new Object();
+
+            // Pregunta 3 Direct Question Final
+            console.log("\n" + "Pregunta directa C");
+            var preguntaC = body.substr(0, n);
+            console.log(preguntaC);
+
+            ejercicio.statement = preguntaC;
+
+            n = body.indexOf(":") + 2;
+            body = body.substr(n);
+            n = body.search("\n");
+
+            // Respuesta 3 Direct Question Final
+            console.log("\n" + "Respuesta directa C");
+            var respuestaC = body.substr(0, n);
+            console.log(respuestaC);
+
+            n = body.search("\n");
+            body = body.substr(n);
+
+            parteEspecifica.answer = respuestaC;
+
+            ejercicio.parteEspecifica = parteEspecifica;
+
+            db.aceptarSolicitudEjercicio(ejercicio, function (err, result) {
+              if (result)
+                console.log("Correcto");
+              else
+                console.log("Error");
+            });
+
+          }
+
+          // Se comprueba si hay preguntas del tipo "Order sentences"
+          pos = body.search("Order sentences");
+          comprobacion++;
+          if (pos !== -1) {
+
+            numCuestions++;
+            var ejercicio = new Object();
+            ejercicio.type = "OS";
+
+            ejercicio.idContent = idContentAux;
+
+            var parteEspecifica;
+
+            var numFrases = 0;
+            body = body.substr(pos);
+            n = body.search("\n") + 1;
+            body = body.substr(n);
+            pos = body.search("\n");
+            var preguntaOrderSentences = body.substr(0, pos);
+            console.log("\n" + "preguntaOrderSentences");
+            console.log(preguntaOrderSentences);
+
+            ejercicio.statement = preguntaOrderSentences;
+
+            body = body.substr(pos + 4);
+            pos = body.search("Answer");
+            var frases = new Array();
+            while (pos !== 0) {
+              n = body.search("\n");
+
+              // Primera frase a ordenar
+              console.log("\n" + "Frase " + (numFrases + 1) + " a ordenar");
+              var frase = body.substr(0, n);
+              console.log(frase);
+
+              frases.push(frase);
+
+              body = body.substr(n + 1);
+
+              numFrases++;
+
+              pos = body.search("Answer");
+            }
+            if (frases[numFrases - 1].trim() === "")
+              frases.pop();
+
+            numFrases = 0;
+            while (numFrases < frases.length) {
+              if (frases[numFrases].startsWith((numFrases + 1).toString()))
+                frases[numFrases] = frases[numFrases].substr(3);
+
+              console.log(frases[numFrases]);
+
+              numFrases++;
+            }
+
+            n = body.search("\n");
+            body = body.substr(n + 4);
+
+            var frasesOrdenadas = new Array();
+            numFrases = 0;
+            while (numFrases < frases.length) {
+              n = body.search("\n");
+
+              // Primera frase a ordenar
+              console.log("\n" + "Frase ordenada " + (numFrases + 1));
+              var frase = body.substr(0, n);
+              console.log(frase);
+
+              frasesOrdenadas.push(frase);
+
+              body = body.substr(n + 1);
+
+              numFrases++;
+            }
+
+            numFrases = 0;
+            while (numFrases < frasesOrdenadas.length) {
+              if (frasesOrdenadas[numFrases].startsWith((numFrases + 1).toString()))
+                frasesOrdenadas[numFrases] = frasesOrdenadas[numFrases].substr(3);
+
+              console.log(frasesOrdenadas[numFrases]);
+
+              numFrases++;
+            }
+            arrayFrases = new Array();
+            for (var i = 0; i < frasesOrdenadas.length; ++i) {
+              parteEspecifica = new Object();
+
+              parteEspecifica.sentence = frasesOrdenadas[i];
+              parteEspecifica.order_sentence = i + 1;
+
+              arrayFrases.push(parteEspecifica);
+            }
+
+            ejercicio.parteEspecifica = arrayFrases;
+
+            db.aceptarSolicitudEjercicio(ejercicio, function (err, result) {
+              if (result)
+                console.log("Correcto");
+              else
+                console.log("Error");
+            });
+
+          }
+
+        }
+        else
+          console.log("Error");
+      });
+
+      //console.log("\n" + "Hasta aquí lo guardado" + "\n");
+
+
+      //console.log(body);
+
+    });
+  }
+
+  function correspondencia(letra) {
+    switch (letra) {
+      case "A":
+        return 1;
+        break;
+      case "B":
+        return 2;
+        break;
+      case "C":
+        return 3;
+        break;
+      case "D":
+        return 4;
+        break;
+      case "E":
+        return 5;
+        break;
+      case "F":
+        return 6;
+        break;
+      case "G":
+        return 7;
+        break;
+      case "H":
+        return 8;
+        break;
+      default:
+        return 9;
+        break;
+    }
+  }
+
+
+  module.exports = app;

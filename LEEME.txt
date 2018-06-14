@@ -37,9 +37,11 @@ PASSWORDS PARA TESTEO:
 
 PUERTO: La aplicación se lanza en el puerto 3000 -> localhost:3000
 
-BBDD: Importar la BBDD, no es igual que la anterior, hay mas tablas.
+BBDD: Asegurarse de tener la base de datos en xampp con el nombre quizz
 
 EJECUCION: 
-	- iniciar Apache/Sql en Xampp
-	- nmp install
-	- node app.js
+	- iniciar Apache/Sql en Xampp -> importar la bbdd quizz
+    - ejecutar desde node/visual studio las instrucciones:
+        - nmp install -> instala paquetes si no estan
+        - node app.js -> ejecuta la aplicacion 
+    - abrir en el navegador localhost:3000

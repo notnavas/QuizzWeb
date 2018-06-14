@@ -119,10 +119,10 @@
 										<a href="#estadisticasClase" data-toggle="tab">Estadisticas y contribuciones</a>
 									</li>
 									<li>
-										<a href="#ranking" data-toggle="tab">Ranking</a>
-									</li>
-									<li>
 										<a href="#addContent" data-toggle="tab">Añadir Contenido</a>
+									</li>
+									<li >
+										<a href="#addContentWord" data-toggle="tab">Añadir Contenido desde archivo word</a>
 									</li>
 									<li>
 										<a href="#classContent" data-toggle="tab">Contenido de la clase</a>
@@ -199,8 +199,42 @@
 
 									</div>
 									<!-- /.tab-pane -->
-									<div class="tab-pane" id="ranking">
-										Aquí irá un ranking con los alumnos con mas contribuciones/nota media (futuras versiones)
+									<div class="tab-pane" id="addContentWord">
+										<div class="box box-primary">
+											<div class="box-header with-border">
+												<h3 class="box-title">Añadir nuevo contenido/autor</h3>
+											</div>
+											<!-- /.box-header -->
+											<!-- form start -->
+											<form role="form" action="/parser" method="post" enctype='multipart/form-data'>
+												<div class="box-body">
+													<div class="form-group">
+														<input type="hidden" name="MAX_FILE_SIZE" value="41943004" />
+														<label for="documentoWord">Documento de word con el contenido:</label>
+														<input id="documentoWord" required="true" type="file" name="documentoWord" id="upload" class="upload">
+
+														<p class="help-block">El documento es requerido para crear el contenido.</p>
+													</div>
+													<input class="form-control" id="idClaseActual" name="idClaseActual" type="hidden" value="<%- clase.id %>">
+													<div class="form-group">
+														<label for="seccionDelContenido">Seccion/tema de este contenido/autor</label>
+														<select class="form-control" id="seccionContenidoWord" name="seccionContenidoWord">
+															<% sections.forEach(function(valor, indice){%>
+																<option value="<%-valor.id%>">
+																	<%-valor.name%>
+																</option>
+																<%})%>
+														</select>
+													</div>
+
+												</div>
+												<!-- /.box-body -->
+												<div class="box-footer">
+													<button type="submit" class="btn btn-primary">Aceptar</button>
+												</div>
+											</form>
+										</div>
+										<!-- /.box -->
 									</div>
 									<!-- /.tab-pane -->
 
