@@ -1094,15 +1094,15 @@ app.post('/generarTest', authProf, function (request, response) {
   var contenidoConEjs = request.body.contenidosConEjs;
   var numEjs = Number(request.body.numEjercicios);
   contenidoConEjs = JSON.parse(contenidoConEjs);
+
   var numEliminamos = contenidoConEjs.listaEjercicios.length - numEjs;
   //nos quedamos con numEjs ejercicios aleatorios del array, que son los que se añadirán al test
   contenidoConEjs.listaEjercicios.sort(function (a, b) { return 0.5 - Math.random() });
-  contenidoConEjs.listaEjercicios.splice(-1, numEliminamos);
 
-  console.log(contenidoConEjs);
-  console.log(numEjs);
 
-  //falta eliminar los ejercicios de la tabla no_test_question
+  contenidoConEjs.listaEjercicios.splice(numEjs, numEliminamos);
+
+ 
   db.eliminarTestRequestQuestions(contenidoConEjs, function (err, result) {
     if (result) {
       db.insertarTestGenerado(contenidoConEjs, function (err, result) {
